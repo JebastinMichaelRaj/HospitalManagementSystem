@@ -1,0 +1,72 @@
+@model HospitalManagementSystem.Models.Appointment
+
+<form asp-action="Create" asp-controller="Appointment" method="post" id="createAppointmentForm">
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger border-0 mb-3">
+            <i class="fa-solid fa-circle-exclamation me-2"></i>@ViewBag.Error
+        </div>
+    }
+
+    <div class="mb-3">
+        <label asp-for="DoctorID" class="form-label fw-semibold">
+            <i class="fa-solid fa-user-doctor me-1 text-primary"></i>Select Doctor
+        </label>
+        <select asp-for="DoctorID" class="form-select" required>
+            <option value="" disabled selected>-- Choose a Doctor --</option>
+            @if (ViewBag.Doctors != null)
+            {
+                foreach (var doctor in ViewBag.Doctors)
+                {
+                    <option value="@doctor.DoctorID">
+                        Dr. @doctor.FirstName @doctor.LastName
+                        @(string.IsNullOrEmpty(doctor.Specialty as string) ? "" : $"· {doctor.Specialty}")
+                    </option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AppointmentDate" class="form-label fw-semibold">
+            <i class="fa-regular fa-calendar me-1 text-primary"></i>Date & Time
+        </label>
+        <input asp-for="AppointmentDate" type="datetime-local" class="form-control" required
+               id="appointmentDateInput" />
+        <div class="form-text">
+            <i class="fa-solid fa-circle-info me-1"></i>
+            Please select a future date and time.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label fw-semibold">
+            <i class="fa-solid fa-note-sticky me-1 text-primary"></i>Reason for Visit
+            <span class="text-muted fw-normal">(Optional)</span>
+        </label>
+        <textarea asp-for="Notes" class="form-control" rows="3"
+                  placeholder="Briefly describe your symptoms or reason for visit..."></textarea>
+    </div>
+
+    <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-success">
+            <i class="fa-solid fa-calendar-check me-2"></i>Confirm Booking
+        </button>
+    </div>
+</form>
+
+<script>
+    // Set min datetime to now
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInput = document.getElementById('appointmentDateInput');
+        if (dateInput) {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() + 30); // At least 30 min from now
+            const localIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+                .toISOString()
+                .slice(0, 16);
+            dateInput.min = localIso;
+        }
+    });
+</script>

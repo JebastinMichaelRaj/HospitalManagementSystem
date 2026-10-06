@@ -1,0 +1,136 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="fa-solid fa-gauge-high text-primary me-2"></i>Hospital Overview
+        </h2>
+        <p class="text-muted mb-0">
+            <i class="fa-regular fa-calendar me-1"></i>
+            @DateTime.Now.ToString("dddd, MMMM dd, yyyy") &mdash; Real-time statistics
+        </p>
+    </div>
+    <div class="text-end">
+        <span class="badge bg-success px-3 py-2">
+            <i class="fa-solid fa-circle-dot me-1"></i>System Live
+        </span>
+    </div>
+</div>
+
+<!-- Stat Cards Row -->
+<div class="row g-4 mb-4">
+    <!-- Total Patients -->
+    <div class="col-sm-6 col-xl-3 animate-in animate-delay-1">
+        <div class="card stat-card text-white shadow" style="background: linear-gradient(135deg,#0d6efd,#0a58ca);">
+            <div class="card-body position-relative">
+                <i class="fa-solid fa-users stat-icon"></i>
+                <p class="stat-label mb-1">Total Patients</p>
+                <p class="stat-number mb-2">@ViewBag.TotalPatients</p>
+                <a href="/Patient/Index" class="stat-link">
+                    Manage Patients <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Appointments -->
+    <div class="col-sm-6 col-xl-3 animate-in animate-delay-2">
+        <div class="card stat-card text-white shadow" style="background: linear-gradient(135deg,#198754,#157347);">
+            <div class="card-body position-relative">
+                <i class="fa-solid fa-calendar-check stat-icon"></i>
+                <p class="stat-label mb-1">Total Appointments</p>
+                <p class="stat-number mb-2">@ViewBag.TotalAppointments</p>
+                <a href="/Appointment/Index" class="stat-link">
+                    View Schedule <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Doctors -->
+    <div class="col-sm-6 col-xl-3 animate-in animate-delay-3">
+        <div class="card stat-card text-white shadow" style="background: linear-gradient(135deg,#0dcaf0,#0aa2c0);">
+            <div class="card-body position-relative">
+                <i class="fa-solid fa-user-doctor stat-icon"></i>
+                <p class="stat-label mb-1">Active Doctors</p>
+                <p class="stat-number mb-2">@ViewBag.TotalDoctors</p>
+                <a href="/Doctor/Index" class="stat-link">
+                    Manage Doctors <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Billing -->
+    <div class="col-sm-6 col-xl-3 animate-in animate-delay-4">
+        <div class="card stat-card text-white shadow" style="background: linear-gradient(135deg,#fd7e14,#e06b0a);">
+            <div class="card-body position-relative">
+                <i class="fa-solid fa-file-invoice-dollar stat-icon"></i>
+                <p class="stat-label mb-1">Pending Invoices</p>
+                <p class="stat-number mb-2">@ViewBag.PendingBillings</p>
+                <a href="/Billing/Index" class="stat-link">
+                    View Billing <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <h5 class="fw-semibold text-muted mb-3">
+            <i class="fa-solid fa-bolt me-2"></i>Quick Actions
+        </h5>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <button class="quick-action-card w-100 open-modal-btn"
+                data-url="/Doctor/Create" data-title="Add New Doctor">
+            <div class="quick-action-icon text-primary">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+            <div class="fw-semibold">Add Doctor</div>
+        </button>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="/Patient/Index" class="quick-action-card">
+            <div class="quick-action-icon text-success">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <div class="fw-semibold">View Patients</div>
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="/Appointment/Index" class="quick-action-card">
+            <div class="quick-action-icon text-info">
+                <i class="fa-solid fa-calendar-plus"></i>
+            </div>
+            <div class="fw-semibold">View Appointments</div>
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="/Billing/Index" class="quick-action-card">
+            <div class="quick-action-icon text-warning">
+                <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div class="fw-semibold">Manage Billing</div>
+        </a>
+    </div>
+</div>
+
+<!-- Info Banner -->
+@if (ViewBag.TodayAppointments != null && (int)ViewBag.TodayAppointments > 0)
+{
+    <div class="alert alert-info alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="fa-solid fa-calendar-day me-2"></i>
+        <strong>Today's Schedule:</strong> There are <strong>@ViewBag.TodayAppointments</strong> appointment(s) scheduled for today.
+        <a href="/Appointment/Index" class="alert-link ms-1">View all →</a>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}

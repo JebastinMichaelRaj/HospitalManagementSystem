@@ -1,0 +1,163 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <span class="badge bg-primary mb-3 px-3 py-2">
+                <i class="fa-solid fa-shield-halved me-1"></i>Trusted Healthcare Platform
+            </span>
+            <h1 class="display-4 fw-bold text-dark mb-3">
+                Modern Healthcare,<br />
+                <span class="text-primary">Simplified.</span>
+            </h1>
+            <p class="lead text-muted mb-4">
+                Hospital Care streamlines appointment booking, secures patient medical records,
+                and ensures top-tier administrative efficiency — all in one unified platform.
+            </p>
+
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="/Account/Login" class="btn btn-primary btn-lg px-5 shadow-sm">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>Sign In
+                    </a>
+                    <a href="/Account/Register" class="btn btn-outline-primary btn-lg px-5 shadow-sm">
+                        <i class="fa-solid fa-user-plus me-2"></i>Create Account
+                    </a>
+                </div>
+            }
+            else
+            {
+                <a href="/Home/Index" class="btn btn-success btn-lg px-5 shadow-sm">
+                    <i class="fa-solid fa-gauge-high me-2"></i>Go to Dashboard
+                </a>
+            }
+
+            <!-- Stats Row -->
+            <div class="row g-3 mt-4">
+                <div class="col-4 text-center">
+                    <div class="fw-bold fs-4 text-primary">24/7</div>
+                    <small class="text-muted">Support</small>
+                </div>
+                <div class="col-4 text-center border-start border-end">
+                    <div class="fw-bold fs-4 text-success">100%</div>
+                    <small class="text-muted">Secure</small>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="fw-bold fs-4 text-info">Fast</div>
+                    <small class="text-muted">Booking</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="hero-brand-card">
+                <i class="fa-solid fa-hospital-user text-primary" style="font-size:5rem;"></i>
+                <h3 class="fw-bold text-dark mt-3 mb-2">Your Health, Our Priority</h3>
+                <p class="text-muted">Providing world-class care through intelligent technology.</p>
+                <div class="row g-3 mt-3">
+                    <div class="col-6">
+                        <div class="bg-light rounded-3 p-3 text-center">
+                            <i class="fa-solid fa-calendar-check text-primary fa-xl mb-2"></i>
+                            <div class="fw-semibold" style="font-size:0.85rem;">Smart Scheduling</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-light rounded-3 p-3 text-center">
+                            <i class="fa-solid fa-lock text-success fa-xl mb-2"></i>
+                            <div class="fw-semibold" style="font-size:0.85rem;">Secure Records</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-light rounded-3 p-3 text-center">
+                            <i class="fa-solid fa-file-invoice-dollar text-warning fa-xl mb-2"></i>
+                            <div class="fw-semibold" style="font-size:0.85rem;">Auto Billing</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-light rounded-3 p-3 text-center">
+                            <i class="fa-solid fa-user-doctor text-info fa-xl mb-2"></i>
+                            <div class="fw-semibold" style="font-size:0.85rem;">Expert Doctors</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row g-4 mt-2 pt-4 border-top">
+    <div class="col-12 text-center mb-2">
+        <h2 class="fw-bold">Why Choose Hospital Care?</h2>
+        <p class="text-muted">Everything you need in one place</p>
+    </div>
+
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <div class="feature-icon">
+                <i class="fa-solid fa-calendar-plus text-primary"></i>
+            </div>
+            <h4 class="fw-bold">Easy Scheduling</h4>
+            <p class="text-muted">Book appointments with our top specialists in just a few clicks — available 24/7 from any device.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <div class="feature-icon">
+                <i class="fa-solid fa-shield-halved text-success"></i>
+            </div>
+            <h4 class="fw-bold">Secure Records</h4>
+            <p class="text-muted">Your medical history is encrypted and securely stored, accessible only to you and your authorized doctors.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <div class="feature-icon">
+                <i class="fa-solid fa-file-invoice-dollar text-warning"></i>
+            </div>
+            <h4 class="fw-bold">Transparent Billing</h4>
+            <p class="text-muted">View automated invoices, track payment statuses, and get a clear breakdown of all charges directly on your dashboard.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Role CTA Section -->
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="row g-4 mt-4 pt-4 border-top">
+        <div class="col-12 text-center mb-2">
+            <h2 class="fw-bold">Who Are You?</h2>
+            <p class="text-muted">Different experiences tailored to each role</p>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center p-4 h-100">
+                <i class="fa-solid fa-user-injured text-success fa-2x mb-3"></i>
+                <h5 class="fw-bold">Patient</h5>
+                <p class="text-muted small">Book appointments, view your medical history, and track your bills — all in one place.</p>
+                <a href="/Account/Register" class="btn btn-outline-success mt-auto">Register as Patient</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center p-4 h-100">
+                <i class="fa-solid fa-user-doctor text-primary fa-2x mb-3"></i>
+                <h5 class="fw-bold">Doctor</h5>
+                <p class="text-muted small">Manage your schedule, view patient history, and update appointment statuses effortlessly.</p>
+                <a href="/Account/Register" class="btn btn-outline-primary mt-auto">Register as Doctor</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center p-4 h-100">
+                <i class="fa-solid fa-user-tie text-warning fa-2x mb-3"></i>
+                <h5 class="fw-bold">Administrator</h5>
+                <p class="text-muted small">Full oversight of all patients, doctors, appointments, and billing from a powerful admin dashboard.</p>
+                <a href="/Account/Login" class="btn btn-outline-warning mt-auto">Admin Login</a>
+            </div>
+        </div>
+    </div>
+}

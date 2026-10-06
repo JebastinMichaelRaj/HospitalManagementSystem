@@ -1,0 +1,27 @@
+﻿@model HospitalManagementSystem.Models.Patient
+
+<form asp-action="Edit" asp-controller="Patient" method="post" id="editPatientForm">
+    <input type="hidden" asp-for="PatientID" />
+    <input type="hidden" asp-for="UserID" />
+    <input type="hidden" asp-for="RegisteredAt" />
+
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label">First Name</label>
+        <input asp-for="FirstName" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label">Last Name</label>
+        <input asp-for="LastName" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+        <input asp-for="DateOfBirth" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="ContactNumber" class="form-label">Contact Number</label>
+        <input asp-for="ContactNumber" class="form-control" />
+    </div>
+    <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-primary">Update Details</button>
+    </div>
+</form>

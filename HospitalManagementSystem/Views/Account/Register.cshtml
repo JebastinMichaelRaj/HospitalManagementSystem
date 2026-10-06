@@ -1,0 +1,220 @@
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-md-10">
+                <div class="card auth-card shadow-lg">
+                    <div class="row g-0">
+
+                        <!-- Brand Panel (Left) -->
+                        <div class="col-md-5 auth-brand-panel d-none d-md-flex" style="background: linear-gradient(160deg, #198754 0%, #0f5132 100%);">
+                            <div>
+                                <div class="auth-brand-icon">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                </div>
+                                <h2 class="fw-bold mb-3">Join Hospital Care</h2>
+                                <p class="opacity-75 mb-4">Create your account and get instant access to our healthcare management platform.</p>
+                                <div class="d-flex flex-column gap-3 text-start">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-check-circle fa-lg"></i>
+                                        <span>Free to register</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-clock fa-lg"></i>
+                                        <span>Instant access</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-heart-pulse fa-lg"></i>
+                                        <span>24/7 healthcare support</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Panel (Right) -->
+                        <div class="col-md-7 auth-form-panel">
+                            <div class="mb-4 text-center">
+                                <i class="fa-solid fa-user-plus fa-2x text-success mb-2"></i>
+                                <h3 class="fw-bold text-dark">Create Account</h3>
+                                <p class="text-muted">Fill in the details below to get started.</p>
+                            </div>
+
+                            @if (ViewBag.Error != null)
+                            {
+                                <div id="server-register-error" data-message="@ViewBag.Error" style="display:none;"></div>
+                            }
+
+                            <form asp-action="Register" method="post" id="registerForm">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">
+                                        <i class="fa-solid fa-user me-1 text-success"></i>Username
+                                    </label>
+                                    <input type="text" class="form-control" id="username" name="username"
+                                           required placeholder="Choose a username" autocomplete="username" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">
+                                        <i class="fa-solid fa-lock me-1 text-success"></i>Password
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                               required placeholder="Minimum 6 characters" autocomplete="new-password" />
+                                        <button type="button" class="toggle-password" id="togglePassword" title="Show/Hide">
+                                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                                        </button>
+                                    </div>
+                                    <!-- Password Strength Indicator -->
+                                    <div class="mt-2">
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar password-strength" id="passwordStrengthBar"
+                                                 role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                        <small id="passwordStrengthText" class="text-muted mt-1 d-block"></small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">
+                                        <i class="fa-solid fa-lock-open me-1 text-success"></i>Confirm Password
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                               required placeholder="Re-enter your password" autocomplete="new-password" />
+                                        <span class="input-group-text" id="passwordMatchIcon" style="background:#f8f9fa; border-left:none;">
+                                            <i class="fa-solid fa-minus text-muted"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="role" class="form-label">
+                                        <i class="fa-solid fa-id-badge me-1 text-success"></i>I am a...
+                                    </label>
+                                    <select class="form-select" id="role" name="role" required>
+                                        <option value="" disabled selected>-- Select your role --</option>
+                                        <option value="Patient">🧑‍⚕️ Patient</option>
+                                        <option value="Doctor">👨‍⚕️ Doctor</option>
+                                    </select>
+                                    <small class="text-muted">Administrator accounts are created by system admins only.</small>
+                                </div>
+
+                                <div class="d-grid mb-3">
+                                    <button type="submit" class="btn btn-success btn-lg" id="registerBtn">
+                                        <i class="fa-solid fa-user-plus me-2"></i>Create My Account
+                                    </button>
+                                </div>
+                            </form>
+
+                            <hr class="my-3" />
+
+                            <div class="text-center">
+                                <p class="text-muted mb-0">
+                                    Already have an account?
+                                    <a href="/Account/Login" class="text-primary fw-semibold text-decoration-none">Sign In</a>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Show server-side registration error via SweetAlert2
+        const errEl = document.getElementById('server-register-error');
+        if (errEl) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Failed',
+                text: errEl.getAttribute('data-message'),
+                confirmButtonColor: '#198754',
+                confirmButtonText: 'Try Again'
+            });
+        }
+
+        // Show/Hide Password Toggle
+        const toggleBtn = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('togglePasswordIcon');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                toggleIcon.className = isPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+            });
+        }
+
+        // Password Strength Indicator
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+        if (passwordInput && strengthBar) {
+            passwordInput.addEventListener('input', function () {
+                const val = this.value;
+                let strength = 0;
+                if (val.length >= 6) strength++;
+                if (val.length >= 10) strength++;
+                if (/[A-Z]/.test(val)) strength++;
+                if (/[0-9]/.test(val)) strength++;
+                if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+                const levels = [
+                    { width: '0%', color: '', text: '' },
+                    { width: '20%', color: 'bg-danger', text: '⚠️ Very Weak' },
+                    { width: '40%', color: 'bg-warning', text: '🔶 Weak' },
+                    { width: '60%', color: 'bg-info', text: '🔷 Fair' },
+                    { width: '80%', color: 'bg-primary', text: '✅ Strong' },
+                    { width: '100%', color: 'bg-success', text: '🔒 Very Strong' }
+                ];
+
+                const level = levels[Math.min(strength, 5)];
+                strengthBar.style.width = level.width;
+                strengthBar.className = `progress-bar password-strength ${level.color}`;
+                strengthText.textContent = val.length > 0 ? `Password strength: ${level.text}` : '';
+            });
+        }
+
+        // Password Match Indicator
+        const confirmInput = document.getElementById('confirmPassword');
+        const matchIcon = document.getElementById('passwordMatchIcon');
+        if (confirmInput && matchIcon) {
+            confirmInput.addEventListener('input', function () {
+                const match = this.value === passwordInput.value;
+                matchIcon.innerHTML = match && this.value.length > 0
+                    ? '<i class="fa-solid fa-check text-success"></i>'
+                    : this.value.length > 0
+                        ? '<i class="fa-solid fa-times text-danger"></i>'
+                        : '<i class="fa-solid fa-minus text-muted"></i>';
+            });
+        }
+
+        // Submit button loading state
+        const registerForm = document.getElementById('registerForm');
+        const registerBtn = document.getElementById('registerBtn');
+        if (registerForm && registerBtn) {
+            registerForm.addEventListener('submit', function (e) {
+                if (passwordInput.value !== confirmInput.value) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Passwords Don\'t Match',
+                        text: 'Please make sure your passwords match before submitting.',
+                        confirmButtonColor: '#198754'
+                    });
+                    return;
+                }
+                registerBtn.disabled = true;
+                registerBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating Account...';
+            });
+        }
+    });
+</script>
+}

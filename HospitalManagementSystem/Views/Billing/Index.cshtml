@@ -1,0 +1,224 @@
+@model IEnumerable<HospitalManagementSystem.Models.Billing>
+
+@{
+    ViewData["Title"] = "Billing & Invoices";
+    var modelList = Model.ToList();
+    int pendingCount = modelList.Count(b => b.PaymentStatus == "Pending");
+    int paidCount = modelList.Count(b => b.PaymentStatus == "Paid");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Billing & Invoices
+        </h2>
+        <p class="text-muted mb-0">@modelList.Count total invoices</p>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-warning text-dark px-3 py-2">
+            <i class="fa-solid fa-hourglass-half me-1"></i>@pendingCount Pending
+        </span>
+        <span class="badge bg-success px-3 py-2">
+            <i class="fa-solid fa-check-circle me-1"></i>@paidCount Paid
+        </span>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body py-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fa-solid fa-search text-muted"></i>
+                    </span>
+                    <input type="text" id="searchInput" class="form-control border-start-0"
+                           placeholder="Search by patient or invoice ID..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select id="statusFilter" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-secondary w-100" id="clearFilters">
+                    <i class="fa-solid fa-rotate-left me-1"></i>Clear
+                </button>
+            </div>
+            <div class="col-md-2 text-end">
+                <span class="badge bg-primary px-3 py-2" id="resultCount">@modelList.Count results</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Billing Table -->
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        @if (!modelList.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fa-solid fa-file-circle-xmark"></i>
+                </div>
+                <h5 class="fw-semibold">No Invoices Yet</h5>
+                <p class="text-muted">Invoices are automatically generated when an appointment is marked as Completed.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="billingTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4"><i class="fa-solid fa-hashtag me-1"></i>Invoice ID</th>
+                            <th><i class="fa-solid fa-user me-2"></i>Patient</th>
+                            <th><i class="fa-solid fa-user-doctor me-2"></i>Doctor</th>
+                            <th><i class="fa-regular fa-calendar me-2"></i>Appt. Date</th>
+                            <th><i class="fa-solid fa-dollar-sign me-1"></i>Amount</th>
+                            <th><i class="fa-solid fa-tag me-2"></i>Status</th>
+                            <th><i class="fa-regular fa-calendar-check me-2"></i>Billed On</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billingBody">
+                        @foreach (var bill in modelList)
+                        {
+                            <tr class="billing-row"
+                                data-patient="@(bill.Appointment?.Patient?.FirstName + " " + bill.Appointment?.Patient?.LastName)"
+                                data-id="@bill.BillingID"
+                                data-status="@bill.PaymentStatus">
+                                <td class="ps-4">
+                                    <code class="text-muted" style="font-size:0.8rem;">
+                                        #@(bill.BillingID?.Length > 8 ? bill.BillingID.Substring(0, 8) : bill.BillingID)
+                                    </code>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center"
+                                             style="width:32px;height:32px;font-size:0.75rem;font-weight:700;">
+                                            @(bill.Appointment?.Patient?.FirstName?.Substring(0, 1).ToUpper() ?? "?")
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">
+                                                @(bill.Appointment?.Patient?.FirstName) @(bill.Appointment?.Patient?.LastName)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    Dr. @(bill.Appointment?.Doctor?.FirstName) @(bill.Appointment?.Doctor?.LastName)
+                                </td>
+                                <td>
+                                    <small>@(bill.Appointment?.AppointmentDate?.ToString("MMM dd, yyyy") ?? "N/A")</small>
+                                </td>
+                                <td>
+                                    <strong class="text-success">$@bill.TotalAmount.ToString("0.00")</strong>
+                                </td>
+                                <td>
+                                    @if (bill.PaymentStatus == "Paid")
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fa-solid fa-check-circle me-1"></i>Paid
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fa-solid fa-hourglass-half me-1"></i>Pending
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        @(bill.BillingDate?.ToString("MMM dd, yyyy") ?? "—")
+                                    </small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        @* <a href="/Billing/Details/@bill.BillingID"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            <i class="fa-solid fa-eye me-1"></i>View
+                                        </a> *@
+
+                                        @* Edit invoice amount/status modal *@
+                                        <button class="btn btn-sm btn-primary open-modal-btn"
+                                                data-url="/Billing/Edit/@bill.BillingID"
+                                                data-title="Edit Invoice">
+                                            <i class="fa-solid fa-pen me-1"></i>Edit
+                                        </button>
+
+                                        @* Mark as Paid — POST form with SweetAlert confirm *@
+                                        @if (bill.PaymentStatus != "Paid")
+                                        {
+                                            <form asp-action="MarkAsPaid" asp-controller="Billing"
+                                                  method="post" class="confirm-action-form d-inline"
+                                                  data-confirm-title="Mark as Paid"
+                                                  data-confirm-message="Mark invoice #@(bill.BillingID?.Substring(0,8)) as Paid? This action will update the payment status immediately.">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@bill.BillingID" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    <i class="fa-solid fa-money-bill-wave me-1"></i>Mark Paid
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const clearBtn = document.getElementById('clearFilters');
+    const resultCount = document.getElementById('resultCount');
+    const rows = document.querySelectorAll('.billing-row');
+
+    function filterTable() {
+        const search = searchInput ? searchInput.value.toLowerCase() : '';
+        const status = statusFilter ? statusFilter.value : '';
+        let visible = 0;
+
+        rows.forEach(row => {
+            const patient = (row.dataset.patient || '').toLowerCase();
+            const id = (row.dataset.id || '').toLowerCase();
+            const rowStatus = row.dataset.status || '';
+
+            const matchSearch = !search || patient.includes(search) || id.includes(search);
+            const matchStatus = !status || rowStatus === status;
+
+            if (matchSearch && matchStatus) {
+                row.style.display = '';
+                visible++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (resultCount) resultCount.textContent = visible + ' result' + (visible !== 1 ? 's' : '');
+    }
+
+    if (searchInput) searchInput.addEventListener('input', filterTable);
+    if (statusFilter) statusFilter.addEventListener('change', filterTable);
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+            if (searchInput) searchInput.value = '';
+            if (statusFilter) statusFilter.value = '';
+            filterTable();
+        });
+    }
+});
+</script>
+}

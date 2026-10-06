@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hospital Care</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HospitalManagementSystem.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/Home/Index">
+                    <i class="fa-solid fa-hospital-user"></i>
+                    Hospital Care
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" && ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
+                                   href="/Home/Index">
+                                    <i class="fa-solid fa-gauge-high me-1"></i>Dashboard
+                                </a>
+                            </li>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
+                                       href="/Patient/Index">
+                                        <i class="fa-solid fa-users me-1"></i>Patients
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctor" ? "active" : "")"
+                                       href="/Doctor/Index">
+                                        <i class="fa-solid fa-user-doctor me-1"></i>Doctors
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appointment" ? "active" : "")"
+                                       href="/Appointment/Index">
+                                        <i class="fa-solid fa-calendar-check me-1"></i>Appointments
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Billing" ? "active" : "")"
+                                       href="/Billing/Index">
+                                        <i class="fa-solid fa-file-invoice-dollar me-1"></i>Billing
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Doctor"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")"
+                                       href="/Patient/Index">
+                                        <i class="fa-solid fa-users me-1"></i>Patients
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appointment" ? "active" : "")"
+                                       href="/Appointment/Index">
+                                        <i class="fa-solid fa-calendar-check me-1"></i>My Schedule
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Patient"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appointment" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"
+                                       href="/Appointment/Index">
+                                        <i class="fa-solid fa-clock-rotate-left me-1"></i>My Appointments
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Billing/MyBills">
+                                        <i class="fa-solid fa-receipt me-1"></i>My Bills
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav align-items-center gap-2">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <span class="user-badge text-white d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-circle-user"></i>
+                                    @User.Identity.Name
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <span class="role-pill">Admin</span>
+                                    }
+                                    else if (User.IsInRole("Doctor"))
+                                    {
+                                        <span class="role-pill">Doctor</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="role-pill">Patient</span>
+                                    }
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light btn-sm" href="/Account/Logout">
+                                    <i class="fa-solid fa-right-from-bracket me-1"></i>Logout
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Account/Login">
+                                    <i class="fa-solid fa-right-to-bracket me-1"></i>Login
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm" href="/Account/Register">
+                                    <i class="fa-solid fa-user-plus me-1"></i>Register
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- TempData Alerts (rendered via SweetAlert in site.js) -->
+    @if (TempData["Success"] != null)
+    {
+        <div id="tempdata-success" data-message="@TempData["Success"]" style="display:none;"></div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div id="tempdata-error" data-message="@TempData["Error"]" style="display:none;"></div>
+    }
+    @if (TempData["Warning"] != null)
+    {
+        <div id="tempdata-warning" data-message="@TempData["Warning"]" style="display:none;"></div>
+    }
+    @if (TempData["RegisterSuccess"] != null)
+    {
+        <div id="tempdata-register-success" data-message="@TempData["RegisterSuccess"]" style="display:none;"></div>
+    }
+    @if (TempData["LoginSuccess"] != null)
+    {
+        <div id="tempdata-login-success" data-message="@TempData["LoginSuccess"]" style="display:none;"></div>
+    }
+    @if (TempData["LogoutMessage"] != null)
+    {
+        <div id="tempdata-logout" data-message="@TempData["LogoutMessage"]" style="display:none;"></div>
+    }
+
+    <div class="container mt-4">
+        <main role="main" class="pb-5">
+            @RenderBody()
+        </main>
+    </div>
+      
+
+
+     <footer class="border-top footer">
+            <div class="container d-flex justify-content-between align-items-center">
+            <span class="text-muted">
+                <i class="fa-solid fa-hospital-user me-1 text-primary"></i>
+                &copy; @DateTime.Now.Year Hospital Care &mdash; All rights reserved.
+            </span>
+            <span class="text-muted">
+                <i class="fa-solid fa-shield-halved me-1 text-success"></i>
+                Secure &amp; Encrypted &nbsp;|&nbsp;
+                <a asp-controller="Home" asp-action="Privacy" class="text-muted text-decoration-none">Privacy Policy</a>
+            </span>
+        </div>
+    </footer>
+
+
+    <!-- Global Bootstrap Modal (used by modal-handler.js) -->
+    <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title d-flex align-items-center gap-2" id="formModalLabel">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Manage Record
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body-content">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Custom Scripts -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/modal-handler.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

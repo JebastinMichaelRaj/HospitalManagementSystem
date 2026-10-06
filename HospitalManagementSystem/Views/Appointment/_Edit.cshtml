@@ -1,0 +1,30 @@
+@model HospitalManagementSystem.Models.Appointment
+
+<form asp-action="Edit" asp-controller="Appointment" method="post" id="editAppointmentForm">
+    <input type="hidden" asp-for="AppointmentID" />
+    <input type="hidden" asp-for="PatientID" />
+    <input type="hidden" asp-for="DoctorID" />
+    <input type="hidden" asp-for="AppointmentDate" />
+    <input type="hidden" asp-for="Notes" />
+
+    <div class="mb-3">
+        <label class="form-label fw-semibold">
+            <i class="fa-solid fa-tag me-1 text-primary"></i>Appointment Status
+        </label>
+        <select asp-for="Status" class="form-select" required>
+            <option value="Scheduled">🕐 Scheduled</option>
+            <option value="Completed">✅ Completed</option>
+            <option value="Cancelled">❌ Cancelled</option>
+        </select>
+        <div class="alert alert-info mt-2 py-2 px-3 mb-0" style="font-size:0.85rem;">
+            <i class="fa-solid fa-circle-info me-1"></i>
+            Marking as <strong>Completed</strong> will automatically generate a billing invoice.
+        </div>
+    </div>
+
+    <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk me-2"></i>Update Appointment
+        </button>
+    </div>
+</form>

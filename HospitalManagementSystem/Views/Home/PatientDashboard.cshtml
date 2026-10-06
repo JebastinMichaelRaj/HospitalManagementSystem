@@ -1,0 +1,122 @@
+@{
+    ViewData["Title"] = "My Health Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="fa-solid fa-heart-pulse text-success me-2"></i>
+            Hello, @ViewBag.PatientName! 👋
+        </h2>
+        <p class="text-muted mb-0">
+            <i class="fa-regular fa-calendar me-1"></i>
+            @DateTime.Now.ToString("dddd, MMMM dd, yyyy")
+        </p>
+    </div>
+    <a href="/Appointment/Create" class="btn btn-success">
+        <i class="fa-solid fa-calendar-plus me-2"></i>Book Appointment
+    </a>
+</div>
+
+<!-- Stat Cards Row -->
+<div class="row g-4 mb-4">
+    <div class="col-sm-4 animate-in animate-delay-1">
+        <div class="card stat-card text-white shadow" style="background: linear-gradient(135deg,#0d6efd,#0a58ca);">
+            <div class="card-body position-relative">
+                <i class="fa-solid fa-calendar-alt stat-icon"></i>
+                <p class="stat-label mb-1">Total Visits</p>
+                <p class="stat-number mb-2">@ViewBag.MyAppointments</p>
+                <a href="/Appointment/Index" class="stat-link">
+                    View History <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4 animate-in animate-delay-2">
+        <div class="card stat-card text-white shadow" style="background: linear-gradient(135deg,#fd7e14,#e06b0a);">
+            <div class="card-body position-relative">
+                <i class="fa-solid fa-hourglass-half stat-icon"></i>
+                <p class="stat-label mb-1">Upcoming</p>
+                <p class="stat-number mb-2">@ViewBag.UpcomingAppointments</p>
+                <span class="stat-link">Scheduled visits</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4 animate-in animate-delay-3">
+        <div class="card stat-card text-white shadow" style="background: linear-gradient(135deg,#198754,#157347);">
+            <div class="card-body position-relative">
+                <i class="fa-solid fa-circle-check stat-icon"></i>
+                <p class="stat-label mb-1">Completed</p>
+                <p class="stat-number mb-2">@ViewBag.CompletedAppointments</p>
+                <span class="stat-link">Consultations done</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Next Appointment Card -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">
+                    <i class="fa-solid fa-clock text-primary me-2"></i>Next Appointment
+                </h5>
+                @if (ViewBag.NextAppointmentDate != null && ViewBag.NextAppointmentDate != "None scheduled")
+                {
+                    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3">
+                        <div class="text-center bg-primary text-white rounded-3 p-3" style="min-width:60px;">
+                            <i class="fa-solid fa-calendar fa-lg"></i>
+                        </div>
+                        <div>
+                            <p class="fw-bold mb-0 text-dark">@ViewBag.NextAppointmentDate</p>
+                            @if (!string.IsNullOrEmpty(ViewBag.NextAppointmentDoctor as string))
+                            {
+                                <small class="text-muted">
+                                    <i class="fa-solid fa-user-doctor me-1"></i>@ViewBag.NextAppointmentDoctor
+                                </small>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state py-3">
+                        <i class="fa-regular fa-calendar-xmark fa-2x mb-2"></i>
+                        <p class="mb-0">No upcoming appointments.</p>
+                        <a href="/Appointment/Create" class="btn btn-success btn-sm mt-2">
+                            <i class="fa-solid fa-plus me-1"></i>Book Now
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">
+                    <i class="fa-solid fa-bolt text-warning me-2"></i>Quick Actions
+                </h5>
+                <div class="d-flex flex-column gap-2">
+                    <a href="/Appointment/Create" class="btn btn-success">
+                        <i class="fa-solid fa-calendar-plus me-2"></i>Book New Appointment
+                    </a>
+                    <a href="/Appointment/Index" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-clock-rotate-left me-2"></i>View My History
+                    </a>
+                    <a href="/Billing/MyBills" class="btn btn-outline-warning">
+                        <i class="fa-solid fa-receipt me-2"></i>View My Bills
+                    </a>
+                    <a href="/Doctor/Index" class="btn btn-outline-info">
+                        <i class="fa-solid fa-user-doctor me-2"></i>Find a Doctor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

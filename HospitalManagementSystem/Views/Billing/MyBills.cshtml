@@ -1,0 +1,126 @@
+@model IEnumerable<HospitalManagementSystem.Models.Billing>
+
+@{
+    ViewData["Title"] = "My Bills";
+    var modelList = Model.ToList();
+    var totalDue = modelList.Where(b => b.PaymentStatus == "Pending").Sum(b => b.TotalAmount);
+    var totalPaid = modelList.Where(b => b.PaymentStatus == "Paid").Sum(b => b.TotalAmount);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="fa-solid fa-receipt text-primary me-2"></i>My Bills & Invoices
+        </h2>
+        <p class="text-muted mb-0">@modelList.Count invoice(s) on your account</p>
+    </div>
+    <a href="/Appointment/Create" class="btn btn-success">
+        <i class="fa-solid fa-calendar-plus me-2"></i>Book Appointment
+    </a>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-sm-4">
+        <div class="card border-0 shadow-sm text-center p-3">
+            <div class="text-muted mb-1"><i class="fa-solid fa-file-invoice me-1"></i>Total Invoices</div>
+            <div class="fw-bold fs-2 text-dark">@modelList.Count</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card border-0 shadow-sm text-center p-3">
+            <div class="text-muted mb-1"><i class="fa-solid fa-hourglass-half me-1 text-warning"></i>Amount Due</div>
+            <div class="fw-bold fs-2 text-warning">$@totalDue.ToString("0.00")</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card border-0 shadow-sm text-center p-3">
+            <div class="text-muted mb-1"><i class="fa-solid fa-check-circle me-1 text-success"></i>Amount Paid</div>
+            <div class="fw-bold fs-2 text-success">$@totalPaid.ToString("0.00")</div>
+        </div>
+    </div>
+</div>
+
+<!-- Bills Table -->
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        @if (!modelList.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fa-solid fa-file-circle-check"></i>
+                </div>
+                <h5 class="fw-semibold">No Bills Yet</h5>
+                <p class="text-muted">Your invoices will appear here after your completed appointments.</p>
+                <a href="/Appointment/Create" class="btn btn-success">
+                    <i class="fa-solid fa-calendar-plus me-2"></i>Book an Appointment
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-4"><i class="fa-solid fa-hashtag me-1"></i>Invoice</th>
+                            <th><i class="fa-solid fa-user-doctor me-2"></i>Doctor</th>
+                            <th><i class="fa-regular fa-calendar me-2"></i>Appointment Date</th>
+                            <th><i class="fa-solid fa-dollar-sign me-1"></i>Amount</th>
+                            <th><i class="fa-solid fa-tag me-2"></i>Status</th>
+                            <th><i class="fa-regular fa-calendar-check me-2"></i>Billed On</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bill in modelList)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <code class="text-muted" style="font-size:0.8rem;">
+                                        #@(bill.BillingID?.Length > 8 ? bill.BillingID.Substring(0, 8) : bill.BillingID)
+                                    </code>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="doctor-avatar" style="width:32px;height:32px;font-size:0.7rem;">Dr</div>
+                                        <span>Dr. @(bill.Appointment?.Doctor?.FirstName) @(bill.Appointment?.Doctor?.LastName)</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>@(bill.Appointment?.AppointmentDate?.ToString("MMM dd, yyyy") ?? "N/A")</strong><br/>
+                                    <small class="text-muted">@(bill.Appointment?.AppointmentDate?.ToString("hh:mm tt"))</small>
+                                </td>
+                                <td>
+                                    <strong class="text-success">$@bill.TotalAmount.ToString("0.00")</strong>
+                                </td>
+                                <td>
+                                    @if (bill.PaymentStatus == "Paid")
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fa-solid fa-check-circle me-1"></i>Paid
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fa-solid fa-hourglass-half me-1"></i>Pending
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <small class="text-muted">@(bill.BillingDate?.ToString("MMM dd, yyyy") ?? "—")</small>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Billing/Details/@bill.BillingID" class="btn btn-sm btn-outline-primary">
+                                        <i class="fa-solid fa-eye me-1"></i>View Invoice
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

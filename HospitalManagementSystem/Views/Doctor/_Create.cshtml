@@ -1,0 +1,27 @@
+﻿@model HospitalManagementSystem.Models.Doctor
+
+<form asp-action="Create" asp-controller="Doctor" method="post" id="createDoctorForm">
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label">First Name</label>
+        <input asp-for="FirstName" class="form-control" required placeholder="e.g. Jane" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label">Last Name</label>
+        <input asp-for="LastName" class="form-control" required placeholder="e.g. Doe" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Specialty" class="form-label">Specialty</label>
+        <input asp-for="Specialty" class="form-control" required placeholder="e.g. Cardiology" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Department" class="form-label">Department</label>
+        <input asp-for="Department" class="form-control" required placeholder="e.g. Surgery" />
+    </div>
+
+    <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-success">Save Doctor</button>
+    </div>
+</form>

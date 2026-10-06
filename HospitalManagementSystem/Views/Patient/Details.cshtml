@@ -1,0 +1,25 @@
+﻿@model HospitalManagementSystem.Models.Patient
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-info">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Medical Profile: @Model.FirstName @Model.LastName</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Patient ID:</strong> @Model.PatientID</p>
+                    <p><strong>Date of Birth:</strong> @(Model.DateOfBirth?.ToString("MMM dd, yyyy") ?? "Not Provided")</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Contact:</strong> @Model.ContactNumber</p>
+                    <p><strong>Registered On:</strong> @(Model.RegisteredAt?.ToString("MMM dd, yyyy") ?? "N/A")</p>
+                </div>
+            </div>
+            <a href="/Patient/Index" class="btn btn-secondary mt-3">← Back to Directory</a>
+        </div>
+    </div>
+</div>
